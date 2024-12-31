@@ -1,59 +1,65 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import "./Driver.css"
+import './Driver.css';
 
 const DriverCrud = () => {
   const [drivers, setDrivers] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({ Driver: "", Mobile: "", Password: "" });
-  const [modalTitle, setModalTitle] = useState("Add New Driver");
+  const [formData, setFormData] = useState({ Driver: '', Mobile: '', Password: '' });
+  const [modalTitle, setModalTitle] = useState('Add New Driver');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  // Fetch all drivers when the component loads
   useEffect(() => {
-    axios.get("https://jasandyas-backend.onrender.com/autoData")
-      .then((response) => {
-        setDrivers(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching drivers:", error);
-      });
+    fetchDrivers();
   }, []);
 
-  // Open modal for adding driver
+  const fetchDrivers = async () => {
+    setIsLoading(true);
+    setError('');
+    try {
+      const response = await axios.get('https://appsail-50024000807.development.catalystappsail.in/autoData');
+      setDrivers(response.data);
+    } catch (error) {
+      setError('Failed to fetch drivers.');
+      console.error('Error fetching drivers:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const openModal = () => {
-    setModalTitle("Add New Driver");
-    setFormData({ Driver: "", Mobile: "", Password: "" });
+    setModalTitle('Add New Driver');
+    setFormData({ Driver: '', Mobile: '', Password: '' });
     setShowModal(true);
   };
 
-  // Handle form input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle form submission for create
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    axios.post("https://jasandyas-backend.onrender.com/autoData", formData)
-      .then(() => {
-        setShowModal(false);
-        fetchDrivers();
-      })
-      .catch((error) => {
-        console.error("Error adding driver:", error);
-      });
+    try {
+      await axios.post('https://jasandyas-backend.onrender.com/autoData', formData);
+      setShowModal(false);
+      fetchDrivers();
+    } catch (error) {
+      console.error('Error adding driver:', error);
+      setError('Failed to add driver.');
+    }
   };
 
-  // Fetch updated list of drivers
-  const fetchDrivers = () => {
-    axios.get("https://jasandyas-backend.onrender.com/autoData")
-      .then((response) => {
-        setDrivers(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching drivers:", error);
-      });
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this driver?')) {
+      try {
+        await axios.delete(`https://jasandyas-backend.onrender.com/autoData/${id}`);
+        fetchDrivers(); // Refresh the drivers list after deletion
+      } catch (error) {
+        console.error('Error deleting driver:', error);
+        setError('Failed to delete driver.');
+      }
+    }
   };
 
   return (
@@ -61,25 +67,37 @@ const DriverCrud = () => {
       <h1>Driver Management</h1>
       <button className="btn" onClick={openModal}>Add New Driver</button>
 
-      {/* Driver Table */}
-      <table className="driver-table">
-        <thead>
-          <tr>
-            <th>Driver</th>
-            <th>Mobile</th>
-          </tr>
-        </thead>
-        <tbody>
-          {drivers.map((driver) => (
-            <tr key={driver.id}>
-              <td>{driver.Driver}</td>
-              <td>{driver.Mobile}</td>
+      {error && <p className="error-message">{error}</p>}
+      {isLoading ? (
+        <p>Loading drivers...</p>
+      ) : (
+        <table className="driver-table">
+          <thead>
+            <tr>
+              <th>Driver</th>
+              <th>Mobile</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {drivers.map((driver) => (
+              <tr key={driver.id}>
+                <td>{driver.Driver}</td>
+                <td>{driver.Mobile}</td>
+                <td>
+                  <button
+                    className="btn delete-btn"
+                    onClick={() => handleDelete(driver.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
 
-      {/* Modal for Add Driver */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal">
@@ -99,6 +117,8 @@ const DriverCrud = () => {
                 placeholder="Mobile"
                 value={formData.Mobile}
                 onChange={handleChange}
+                pattern="^\d{10}$"
+                title="Enter a valid 10-digit mobile number."
                 required
               />
               <input

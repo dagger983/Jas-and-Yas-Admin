@@ -6,12 +6,10 @@ const AutoBookings = () => {
   const [orders, setOrders] = useState([]);
   const [drivers, setDrivers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const [selectedDrivers, setSelectedDrivers] = useState({});
   const [sentOrders, setSentOrders] = useState([]);
-  const [loadingOrder, setLoadingOrder] = useState(null); // Track the loading state of the button
-  const [lastFetchedAt, setLastFetchedAt] = useState(null);
-  const [fetchInterval, setFetchInterval] = useState(5000); // Default: 30 seconds
+  const [loadingOrderIds, setLoadingOrderIds] = useState([]); // Track loading for multiple orders
+  const [fetchInterval, setFetchInterval] = useState(5000); // Default: 5 seconds
 
   const fetchOrders = async () => {
     try {
@@ -22,8 +20,6 @@ const AutoBookings = () => {
         (order) => !sentOrders.includes(order.id)
       );
 
-      console.log(response)
-
       setOrders((prevOrders) => {
         const combinedOrders = [...newOrders, ...prevOrders];
         const uniqueOrders = combinedOrders.filter(
@@ -32,21 +28,21 @@ const AutoBookings = () => {
         );
         return uniqueOrders;
       });
-
-      setLastFetchedAt(new Date().toISOString());
-    } catch {
-      setError('Failed to fetch orders');
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      // Error handled silently; the function retries automatically on the next interval
     }
   };
 
   const fetchDrivers = async () => {
     try {
       const response = await axios.get(
-        `https://jasandyas-backend.onrender.com/autoData`
+        `https://appsail-50024000807.development.catalystappsail.in/autoData`
       );
       setDrivers(response.data);
-    } catch {
-      setError('Failed to fetch drivers');
+    } catch (error) {
+      console.error('Error fetching drivers:', error);
+      // Error handled silently; the function retries automatically on the next interval
     }
   };
 
@@ -59,18 +55,12 @@ const AutoBookings = () => {
 
     initializeData();
 
-    let interval;
-    const startPolling = () => {
-      clearInterval(interval); // Clear previous interval if any
-      interval = setInterval(() => {
-        fetchOrders();
-      }, fetchInterval);
-    };
-
-    startPolling();
+    const interval = setInterval(() => {
+      fetchOrders();
+    }, fetchInterval);
 
     return () => clearInterval(interval); // Clean up on unmount
-  }, [sentOrders, fetchInterval]); // Restart interval if `fetchInterval` changes
+  }, [sentOrders, fetchInterval]);
 
   const handleDriverSelect = (orderId, driverId) => {
     setSelectedDrivers((prev) => ({ ...prev, [orderId]: driverId }));
@@ -82,7 +72,7 @@ const AutoBookings = () => {
       alert('Please select a driver before sending.');
       return;
     }
-  
+
     const selectedDriver = drivers.find(
       (driver) => driver.id === parseInt(selectedDriverId)
     );
@@ -90,12 +80,12 @@ const AutoBookings = () => {
       alert('Invalid driver selection.');
       return;
     }
-  
+
     if (!order.OTP) {
       alert(`OTP is missing for order ID ${order.id}`);
       return;
     }
-  
+
     const rideData = {
       customer: order.username,
       mobile: order.mobile,
@@ -103,14 +93,13 @@ const AutoBookings = () => {
       drop_location: order.drop_location_name,
       auto_driver: selectedDriver.Driver,
       driver_mobile: selectedDriver.Mobile,
-      mode: order.mode,
+      price: order.price,
       OTP: order.OTP,
+      members: order.members,
     };
-  
-    console.log('Ride data payload:', rideData);
-  
-    setLoadingOrder(order.id); // Set loading state for this order
-  
+
+    setLoadingOrderIds((prev) => [...prev, order.id]); // Add to loading state for this order
+
     try {
       await axios.post(
         `https://jasandyas-backend.onrender.com/rideData`,
@@ -118,12 +107,12 @@ const AutoBookings = () => {
       );
       alert('Ride Booked Successfully!');
       setSentOrders((prev) => [...prev, order.id]);
-  
+
       // Optimistically update orders
       setOrders((prevOrders) =>
         prevOrders.filter((o) => o.id !== order.id)
       );
-  
+
       // Remove from adminData
       await axios.delete(
         `https://jasandyas-backend.onrender.com/adminData/${order.id}`
@@ -132,23 +121,14 @@ const AutoBookings = () => {
       console.error('Error sending ride data:', error);
       alert('Failed to send ride data.');
     } finally {
-      setLoadingOrder(null); // Reset loading state
+      setLoadingOrderIds((prev) => prev.filter((id) => id !== order.id)); // Remove from loading state
     }
   };
-  
 
   if (loading) {
     return (
       <div className="loading-container">
         <div className="loading-spinner"></div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="error-container">
-        <div className="error-alert">{error}</div>
       </div>
     );
   }
@@ -163,11 +143,11 @@ const AutoBookings = () => {
               <th>ID</th>
               <th>Username</th>
               <th>Mobile</th>
-              <th>Distance(km)</th>
+              <th>Price(₹)</th>
               <th>Pickup Location</th>
               <th>Drop Location</th>
               <th>Booked At</th>
-              <th>Payment Mode</th>
+              <th>Members</th>
               <th>Driver Transfer</th>
             </tr>
           </thead>
@@ -180,12 +160,12 @@ const AutoBookings = () => {
                 <td>{order.id}</td>
                 <td>{order.username}</td>
                 <td>{order.mobile}</td>
-                <td>{order.distance}</td>
+                <td>{order.price}</td>
                 <td>{order.pickup_location_name}</td>
                 <td>{order.drop_location_name}</td>
-                
                 <td>{new Date(order.created_at).toLocaleString()}</td>
-                <td>{order.mode}</td>
+               
+                <td>{order.members}</td>
                 <td>
                   <select
                     value={selectedDrivers[order.id] || ''}
@@ -203,9 +183,9 @@ const AutoBookings = () => {
                   <button
                     className="send-button"
                     onClick={() => handleSend(order)}
-                    disabled={loadingOrder === order.id} // Disable button while loading
+                    disabled={loadingOrderIds.includes(order.id)} // Disable if order is being processed
                   >
-                    {loadingOrder === order.id ? (
+                    {loadingOrderIds.includes(order.id) ? (
                       <div className="button-loader"></div>
                     ) : (
                       'Send'
