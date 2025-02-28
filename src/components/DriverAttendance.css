@@ -1,0 +1,65 @@
+  .dashboard-container {
+    max-width: 1100px;
+    margin: 30px auto;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+ 
+  
+  /* Calendar */
+  .react-calendar {
+    max-width: 300px;
+    margin: 20px auto;
+    border-radius: 10px;
+    overflow: hidden;
+    border: none;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .react-calendar__tile--active {
+    background: #007bff !important;
+    color: white !important;
+  }
+  
+  /* Table */
+  .attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    margin-top: 20px;
+  }
+  
+  .attendance-table th, .attendance-table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .attendance-table th {
+    background: #007bff;
+    color: white;
+  }
+  
+  .attendance-table tbody tr:hover {
+    background: #f1f1f1;
+  }
+  
+  /* No Data Message */
+  .no-data {
+    text-align: center;
+    color: #888;
+    font-size: 16px;
+    padding: 20px;
+  }
+  
+  /* Chart Container */
+  .chart-container {
+    margin-top: 30px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  

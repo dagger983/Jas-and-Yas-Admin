@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import "./Sidebar.css";
 import { Link } from "react-router-dom";
 const Sidebar = () => {
-  const [collapsed, setCollapsed] = useState(false);
-  const [activeItem, setActiveItem] = useState("home");
+  const [collapsed, setCollapsed] = useState(true);
+  const [activeItem, setActiveItem] = useState("Booking");
 
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
@@ -26,8 +26,9 @@ const Sidebar = () => {
         {[
           { name: "Booking", href: "/" },
           { name: "Drivers", href: "/Driver" },
-          { name: "about", href: "#about" },
-          { name: "contact", href: "#contact" },
+          { name: "Drivers Attendance", href: "/DriverEntry" },
+          { name: "Driver Rides", href: "/DriverRides" },
+          { name: "Products Upload", href: "/ProductManager" },
         ].map((item) => (
           <li
             key={item.name}
