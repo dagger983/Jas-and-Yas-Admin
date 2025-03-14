@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Driver.css';
 
+const API_BASE_URL = 'https://jasandyas-backend.onrender.com/autoData';
+
 const DriverCrud = () => {
   const [drivers, setDrivers] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -9,6 +11,7 @@ const DriverCrud = () => {
   const [modalTitle, setModalTitle] = useState('Add New Driver');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
     fetchDrivers();
@@ -18,7 +21,7 @@ const DriverCrud = () => {
     setIsLoading(true);
     setError('');
     try {
-      const response = await axios.get('https://appsail-50024000807.development.catalystappsail.in/autoData');
+      const response = await axios.get("https://appsail-50024000807.development.catalystappsail.in/autoData");
       setDrivers(response.data);
     } catch (error) {
       setError('Failed to fetch drivers.');
@@ -40,24 +43,34 @@ const DriverCrud = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError('');
     try {
-      await axios.post('https://jasandyas-backend.onrender.com/autoData', formData);
+      await axios.post(API_BASE_URL, formData);
+      setSuccessMessage('Driver added successfully.');
       setShowModal(false);
       fetchDrivers();
     } catch (error) {
       console.error('Error adding driver:', error);
       setError('Failed to add driver.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this driver?')) {
+      setIsLoading(true);
+      setError('');
       try {
-        await axios.delete(`https://jasandyas-backend.onrender.com/autoData/${id}`);
-        fetchDrivers(); // Refresh the drivers list after deletion
+        await axios.delete(`${API_BASE_URL}/${id}`);
+        setSuccessMessage('Driver deleted successfully.');
+        fetchDrivers();
       } catch (error) {
         console.error('Error deleting driver:', error);
         setError('Failed to delete driver.');
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -68,6 +81,7 @@ const DriverCrud = () => {
       <button className="btn" onClick={openModal}>Add New Driver</button>
 
       {error && <p className="error-message">{error}</p>}
+      {successMessage && <p className="success-message">{successMessage}</p>}
       {isLoading ? (
         <p>Loading drivers...</p>
       ) : (
@@ -88,6 +102,7 @@ const DriverCrud = () => {
                   <button
                     className="btn delete-btn"
                     onClick={() => handleDelete(driver.id)}
+                    disabled={isLoading}
                   >
                     Delete
                   </button>
@@ -127,11 +142,16 @@ const DriverCrud = () => {
                 placeholder="Password"
                 value={formData.Password}
                 onChange={handleChange}
+                minLength="6"
                 required
               />
               <div className="modal-actions">
-                <button type="submit" className="btn submit-btn">Add Driver</button>
-                <button type="button" className="btn cancel-btn" onClick={() => setShowModal(false)}>Cancel</button>
+                <button type="submit" className="btn submit-btn" disabled={isLoading}>
+                  {isLoading ? 'Adding...' : 'Add Driver'}
+                </button>
+                <button type="button" className="btn cancel-btn" onClick={() => setShowModal(false)}>
+                  Cancel
+                </button>
               </div>
             </form>
           </div>
