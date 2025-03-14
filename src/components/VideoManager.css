@@ -1,0 +1,54 @@
+.video-manager {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  .video-manager input {
+    width: 80%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .video-manager button {
+    padding: 8px 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 5px;
+  }
+  
+  .video-manager button:hover {
+    background-color: #218838;
+  }
+  
+  .video-manager ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .video-manager li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8f9fa;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 5px;
+  }
+  
+  .video-manager li button {
+    background-color: #dc3545;
+  }
+  
+  .video-manager li button:hover {
+    background-color: #c82333;
+  }
+  
