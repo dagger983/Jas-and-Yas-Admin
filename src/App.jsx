@@ -8,6 +8,7 @@ import ProductManager from "./components/ProductManager";
 import DriverRides from "./components/DriverRides";
 import Login from "./components/Login";
 import VideoManager from "./components/VideoManager";
+import UserManagement from "./components/UserManagement";
 const App = () => {
   const location = useLocation();
   const isAuthenticated = localStorage.getItem("isAuthenticated");
@@ -53,6 +54,12 @@ const App = () => {
             path="/Video"
             element={
               isAuthenticated ? <VideoManager /> : <Navigate to="/login" />
+            }
+          />
+             <Route
+            path="/User"
+            element={
+              isAuthenticated ? <UserManagement /> : <Navigate to="/login" />
             }
           />
         </Routes>
