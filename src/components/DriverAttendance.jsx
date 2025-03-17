@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -9,7 +9,6 @@ const API_BASE_URL = "https://appsail-50024000807.development.catalystappsail.in
 const DriverAttendance = () => {
   const [loginData, setLoginData] = useState([]);
   const [logoutData, setLogoutData] = useState([]);
-  const [attendance, setAttendance] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -22,6 +21,11 @@ const DriverAttendance = () => {
           fetch(`${API_BASE_URL}/drivers_login`),
           fetch(`${API_BASE_URL}/drivers_logout`),
         ]);
+
+        if (!loginRes.ok || !logoutRes.ok) {
+          throw new Error("Failed to fetch data");
+        }
+
         const loginJson = await loginRes.json();
         const logoutJson = await logoutRes.json();
 
@@ -37,53 +41,61 @@ const DriverAttendance = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
+  const attendance = useMemo(() => {
     if (loginData.length > 0 && logoutData.length > 0) {
-      const mergedAttendance = loginData.map((login) => {
+      return loginData.map((login) => {
         const logout = logoutData.find((l) => l.mobile === login.mobile);
-  
+
         if (!logout) return null;
-  
+
         const loginTime = new Date(login.login_at);
         const logoutTime = new Date(logout.logout_at);
-  
-        // Check if logout time is later than login time
+
         if (logoutTime <= loginTime) {
           console.warn(`Invalid time range for driver ${login.driver_name}: logout time is not later than login time.`);
-          return null; // Skip this record
+          return null;
         }
-  
-        const workingHours = (logoutTime - loginTime) / (1000 * 60 * 60); // Convert ms to hours
-  
+
+        const workingHours = (logoutTime - loginTime) / (1000 * 60 * 60);
+
         return {
           driver: login.driver_name,
           mobile: login.mobile,
-          date: loginTime.toISOString().split("T")[0], // Extract date
+          date: loginTime.toISOString().split("T")[0], // Extract date in UTC
           login_at: login.login_at,
           logout_at: logout.logout_at,
           working_hours: parseFloat(workingHours.toFixed(2)),
         };
       }).filter(Boolean);
-  
-      setAttendance(mergedAttendance);
     }
+    return [];
   }, [loginData, logoutData]);
 
-  const filteredAttendance = attendance.filter((a) => a.date === selectedDate.toISOString().split("T")[0]);
+  const filteredAttendance = useMemo(() => {
+    const selectedDateUTC = new Date(
+      Date.UTC(
+        selectedDate.getFullYear(),
+        selectedDate.getMonth(),
+        selectedDate.getDate()
+      )
+    ).toISOString().split("T")[0]; // Convert selectedDate to UTC date string
+
+    return attendance.filter((a) => a.date === selectedDateUTC);
+  }, [attendance, selectedDate]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="loading-message">Loading data...</div>;
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className="error-message">{error}</div>;
   }
 
   return (
     <div className="dashboard-container">
       <h2>Driver Attendance Dashboard</h2>
 
-      <Calendar onChange={setSelectedDate} value={selectedDate} />
+      <Calendar onChange={setSelectedDate} value={selectedDate} className="calendar" />
 
       <h3>Attendance for {selectedDate.toDateString()}</h3>
       <table className="attendance-table">
@@ -109,7 +121,7 @@ const DriverAttendance = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="5" className="no-data">No data available</td>
+              <td colSpan="5" className="no-data">No attendance data available for today.</td>
             </tr>
           )}
         </tbody>
