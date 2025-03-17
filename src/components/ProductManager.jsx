@@ -9,8 +9,8 @@ export default function ProductManager() {
     name: "",
     brand: "",
     price: "",
-    category: "",
-    keyword: "",
+    category: "Shirt", // Default category
+    keyword: "Men", // Default keyword
     image_url1: "",
     image_url2: "",
     image_url3: "",
@@ -18,11 +18,11 @@ export default function ProductManager() {
   });
 
   const [editingId, setEditingId] = useState(null);
-  const [loading, setLoading] = useState(false); // Loading state for CRUD operations
+  const [loading, setLoading] = useState(false);
 
   // Fetch products from API
   const fetchProducts = async () => {
-    setLoading(true); // Start loading
+    setLoading(true);
     try {
       const response = await fetch(API_URL + "products");
       const data = await response.json();
@@ -30,7 +30,7 @@ export default function ProductManager() {
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
@@ -45,7 +45,7 @@ export default function ProductManager() {
 
   // Add or update product
   const handleSubmit = async () => {
-    setLoading(true); // Start loading
+    setLoading(true);
     const method = editingId ? "PUT" : "POST";
     const url = editingId
       ? `https://jasandyas-backend.onrender.com/products/${editingId}`
@@ -59,13 +59,13 @@ export default function ProductManager() {
       });
 
       if (response.ok) {
-        fetchProducts(); // Refresh the product list
+        fetchProducts();
         setNewProduct({
           name: "",
           brand: "",
           price: "",
-          category: "",
-          keyword: "",
+          category: "Shirt",
+          keyword: "Men",
           image_url1: "",
           image_url2: "",
           image_url3: "",
@@ -76,7 +76,7 @@ export default function ProductManager() {
     } catch (error) {
       console.error("Error saving product:", error);
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
@@ -88,24 +88,22 @@ export default function ProductManager() {
 
   // Delete a product
   const handleDelete = async (id) => {
-    setLoading(true); // Start loading
+    setLoading(true);
     try {
       await fetch(`https://jasandyas-backend.onrender.com/products/${id}`, {
         method: "DELETE",
       });
-      fetchProducts(); // Refresh the product list
+      fetchProducts();
     } catch (error) {
       console.error("Error deleting product:", error);
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
   return (
     <div className="container">
       <h2>Product Management</h2>
-      <br />
-      <br />
       <div className="form">
         <input
           type="text"
@@ -113,7 +111,7 @@ export default function ProductManager() {
           placeholder="Product Name"
           value={newProduct.name}
           onChange={handleInputChange}
-        />{" "}
+        />
         <br />
         <input
           type="text"
@@ -121,7 +119,7 @@ export default function ProductManager() {
           placeholder="Brand"
           value={newProduct.brand}
           onChange={handleInputChange}
-        />{" "}
+        />
         <br />
         <input
           type="number"
@@ -129,23 +127,35 @@ export default function ProductManager() {
           placeholder="Price"
           value={newProduct.price}
           onChange={handleInputChange}
-        />{" "}
+        />
         <br />
-        <input
-          type="text"
+        <select
           name="category"
-          placeholder="Category"
           value={newProduct.category}
           onChange={handleInputChange}
-        />{" "}
+        >
+         <option value="Men">Men</option>
+          <option value="Women">Women</option>
+          <option value="Kids">Kids</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Food">Food</option>
+          <option value="HomeApp">HomeApp</option>
+        </select>
         <br />
-        <input
-          type="text"
+        <select
           name="keyword"
-          placeholder="Keywords"
           value={newProduct.keyword}
           onChange={handleInputChange}
-        />{" "}
+        >
+         
+          <option value="Shirt">Shirt</option>
+          <option value="Pant">Pant</option>
+          <option value="Food">Food</option>
+          <option value="HomeApp">HomeApp</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Grocery">Grocery</option>
+
+        </select>
         <br />
         <input
           type="text"
@@ -153,7 +163,7 @@ export default function ProductManager() {
           placeholder="Image URL 1"
           value={newProduct.image_url1}
           onChange={handleInputChange}
-        />{" "}
+        />
         <br />
         <input
           type="text"
@@ -161,7 +171,7 @@ export default function ProductManager() {
           placeholder="Image URL 2"
           value={newProduct.image_url2}
           onChange={handleInputChange}
-        />{" "}
+        />
         <br />
         <input
           type="text"
@@ -169,7 +179,7 @@ export default function ProductManager() {
           placeholder="Image URL 3"
           value={newProduct.image_url3}
           onChange={handleInputChange}
-        />{" "}
+        />
         <br />
         <input
           type="text"
@@ -177,7 +187,7 @@ export default function ProductManager() {
           placeholder="Image URL 4"
           value={newProduct.image_url4}
           onChange={handleInputChange}
-        />{" "}
+        />
         <br />
         <br />
         <button onClick={handleSubmit} disabled={loading}>
@@ -185,7 +195,7 @@ export default function ProductManager() {
         </button>
       </div>
 
-      {loading && <div className="loader">Loading...</div>} {/* Show loader during CRUD operations */}
+      {loading && <div className="loader">Loading...</div>}
 
       <div className="product-list">
         {products.map((product) => (
@@ -203,7 +213,7 @@ export default function ProductManager() {
                 <b>Category:</b> {product.category}
               </p>
               <p>
-                <b>Keywords:</b> {product.keyword}
+                <b>Keyword:</b> {product.keyword}
               </p>
             </div>
             <div className="buttons">
