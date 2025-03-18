@@ -28,6 +28,7 @@ const Sidebar = () => {
           { name: "Cancel Clearance", href: "/Cancel" },
           { name: "Drivers", href: "/Driver" },
           { name: "Drivers Attendance", href: "/DriverEntry" },
+          { name: "Drivers Revenue", href: "/DriverRevenue" },
           { name: "Driver Rides", href: "/DriverRides" },
           { name: "Products Upload", href: "/ProductManager" },
           { name: "Ad Upload", href: "/Video" },

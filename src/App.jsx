@@ -10,6 +10,7 @@ import Login from "./components/Login";
 import VideoManager from "./components/VideoManager";
 import UserManagement from "./components/UserManagement";
 import CancelClearance from "./components/CancelClearance";
+import DriverDailyRevenue from "./components/DriverDailyRevenue";
 const App = () => {
   const location = useLocation();
   const isAuthenticated = localStorage.getItem("isAuthenticated");
@@ -67,6 +68,12 @@ const App = () => {
             path="/Cancel"
             element={
               isAuthenticated ? <CancelClearance /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/DriverRevenue"
+            element={
+              isAuthenticated ? <DriverDailyRevenue /> : <Navigate to="/login" />
             }
           />
         </Routes>

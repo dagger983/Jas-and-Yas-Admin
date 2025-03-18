@@ -1,0 +1,45 @@
+.driver-revenue-container {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 20px;
+    background: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .dropdown {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-size: 16px;
+  }
+  
+  .calendar-container {
+    margin: 15px auto;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .earnings {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #27ae60;
+  }
+  
+
+  .no-data {
+    color: red;
+    font-weight: bold;
+    margin-top: 15px;
+  }
+  
