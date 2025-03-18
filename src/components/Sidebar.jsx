@@ -25,12 +25,14 @@ const Sidebar = () => {
       <ul className="sidebar-menu" role="menu">
         {[
           { name: "Booking", href: "/" },
+          { name: "Cancel Clearance", href: "/Cancel" },
           { name: "Drivers", href: "/Driver" },
           { name: "Drivers Attendance", href: "/DriverEntry" },
           { name: "Driver Rides", href: "/DriverRides" },
           { name: "Products Upload", href: "/ProductManager" },
           { name: "Ad Upload", href: "/Video" },
           { name: "User Wallet Update", href: "/User" },
+         ,
         ].map((item) => (
           <li
             key={item.name}

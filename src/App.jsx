@@ -9,6 +9,7 @@ import DriverRides from "./components/DriverRides";
 import Login from "./components/Login";
 import VideoManager from "./components/VideoManager";
 import UserManagement from "./components/UserManagement";
+import CancelClearance from "./components/CancelClearance";
 const App = () => {
   const location = useLocation();
   const isAuthenticated = localStorage.getItem("isAuthenticated");
@@ -60,6 +61,12 @@ const App = () => {
             path="/User"
             element={
               isAuthenticated ? <UserManagement /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/Cancel"
+            element={
+              isAuthenticated ? <CancelClearance /> : <Navigate to="/login" />
             }
           />
         </Routes>
