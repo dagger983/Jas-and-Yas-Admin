@@ -26,7 +26,8 @@ const Sidebar = () => {
         {[
           { name: "Booking", href: "/" },
           { name: "Cancel Clearance", href: "/Cancel" },
-          { name: "Drivers", href: "/Driver" },
+          { name: "Ride Details", href: "/Rides" },
+          { name: "Drivers Details", href: "/Driver" },
           { name: "Drivers Attendance", href: "/DriverEntry" },
           { name: "Drivers Revenue", href: "/DriverRevenue" },
           { name: "Driver Rides", href: "/DriverRides" },
