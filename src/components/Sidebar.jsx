@@ -25,7 +25,6 @@ const Sidebar = () => {
       <ul className="sidebar-menu" role="menu">
         {[
           { name: "Booking", href: "/" },
-          { name: "Cancel Clearance", href: "/Cancel" },
           { name: "Ride Details", href: "/Rides" },
           { name: "Drivers Details", href: "/Driver" },
           { name: "Drivers Attendance", href: "/DriverEntry" },
