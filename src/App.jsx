@@ -12,6 +12,7 @@ import UserManagement from "./components/UserManagement";
 import CancelClearance from "./components/CancelClearance";
 import DriverDailyRevenue from "./components/DriverDailyRevenue";
 import RideDetails from "./components/RideDetails";
+import BookingStats from "./BookingStats";
 const App = () => {
   const location = useLocation();
   const isAuthenticated = localStorage.getItem("isAuthenticated");
@@ -33,7 +34,9 @@ const App = () => {
           />
           <Route
             path="/Driver"
-            element={isAuthenticated ? <DriverCrud /> : <Navigate to="/login" />}
+            element={
+              isAuthenticated ? <DriverCrud /> : <Navigate to="/login" />
+            }
           />
           <Route
             path="/DriverEntry"
@@ -53,13 +56,13 @@ const App = () => {
               isAuthenticated ? <DriverRides /> : <Navigate to="/login" />
             }
           />
-           <Route
+          <Route
             path="/Video"
             element={
               isAuthenticated ? <VideoManager /> : <Navigate to="/login" />
             }
           />
-             <Route
+          <Route
             path="/User"
             element={
               isAuthenticated ? <UserManagement /> : <Navigate to="/login" />
@@ -74,13 +77,23 @@ const App = () => {
           <Route
             path="/DriverRevenue"
             element={
-              isAuthenticated ? <DriverDailyRevenue /> : <Navigate to="/login" />
+              isAuthenticated ? (
+                <DriverDailyRevenue />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
-               <Route
+          <Route
             path="/Rides"
             element={
               isAuthenticated ? <RideDetails /> : <Navigate to="/login" />
+            }
+          />
+            <Route
+            path="/BookingStats"
+            element={
+              isAuthenticated ? <BookingStats /> : <Navigate to="/login" />
             }
           />
         </Routes>
