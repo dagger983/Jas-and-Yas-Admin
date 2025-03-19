@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./DriverAttendance.css";
@@ -41,10 +40,14 @@ const DriverAttendance = () => {
     fetchData();
   }, []);
 
+  // Process attendance data
   const attendance = useMemo(() => {
     if (loginData.length > 0 && logoutData.length > 0) {
       return loginData.map((login) => {
-        const logout = logoutData.find((l) => l.mobile === login.mobile);
+        const loginDate = new Date(login.login_at).toISOString().split("T")[0]; // Extract date
+        const logout = logoutData.find(
+          (l) => l.mobile === login.mobile && new Date(l.logout_at).toISOString().split("T")[0] === loginDate
+        );
 
         if (!logout) return null;
 
@@ -61,9 +64,9 @@ const DriverAttendance = () => {
         return {
           driver: login.driver_name,
           mobile: login.mobile,
-          date: loginTime.toISOString().split("T")[0], // Extract date in UTC
-          login_at: login.login_at,
-          logout_at: logout.logout_at,
+          date: loginDate,
+          login_at: loginTime.toLocaleTimeString(),
+          logout_at: logoutTime.toLocaleTimeString(),
           working_hours: parseFloat(workingHours.toFixed(2)),
         };
       }).filter(Boolean);
@@ -71,15 +74,9 @@ const DriverAttendance = () => {
     return [];
   }, [loginData, logoutData]);
 
+  // Filter data for the selected date
   const filteredAttendance = useMemo(() => {
-    const selectedDateUTC = new Date(
-      Date.UTC(
-        selectedDate.getFullYear(),
-        selectedDate.getMonth(),
-        selectedDate.getDate()
-      )
-    ).toISOString().split("T")[0]; // Convert selectedDate to UTC date string
-
+    const selectedDateUTC = selectedDate.toISOString().split("T")[0];
     return attendance.filter((a) => a.date === selectedDateUTC);
   }, [attendance, selectedDate]);
 
@@ -114,31 +111,18 @@ const DriverAttendance = () => {
               <tr key={index}>
                 <td>{data.driver}</td>
                 <td>{data.mobile}</td>
-                <td>{new Date(data.login_at).toLocaleTimeString()}</td>
-                <td>{new Date(data.logout_at).toLocaleTimeString()}</td>
+                <td>{data.login_at}</td>
+                <td>{data.logout_at}</td>
                 <td>{data.working_hours} hrs</td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="5" className="no-data">No attendance data available for today.</td>
+              <td colSpan="5" className="no-data">No attendance data available for this date.</td>
             </tr>
           )}
         </tbody>
       </table>
-
-      <div className="chart-container">
-        <h3>Working Hours Overview</h3>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={attendance} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-            <XAxis dataKey="driver" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="working_hours" fill="#8884d8" />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
     </div>
   );
 };
