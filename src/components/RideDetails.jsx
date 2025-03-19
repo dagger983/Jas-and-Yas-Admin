@@ -3,7 +3,7 @@ import "./RideDetails.css";
 
 const RideDetails = () => {
   const [rideData, setRideData] = useState([]);
-  const [loading, setLoading] = useState(null); // Stores the ID of the deleting ride
+  const [loading, setLoading] = useState(null);
 
   useEffect(() => {
     fetch("https://appsail-50024000807.development.catalystappsail.in/rideData")
@@ -13,7 +13,7 @@ const RideDetails = () => {
   }, []);
 
   const handleDelete = (id) => {
-    setLoading(id); // Set loading state for the specific ride
+    setLoading(id);
 
     fetch(`https://jasandyas-backend.onrender.com/rideData/${id}`, {
       method: "DELETE",
@@ -26,7 +26,12 @@ const RideDetails = () => {
         }
       })
       .catch((error) => console.error("Error deleting ride:", error))
-      .finally(() => setLoading(null)); // Reset loading state
+      .finally(() => setLoading(null));
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString(); // Formats date to a readable format
   };
 
   return (
@@ -45,6 +50,7 @@ const RideDetails = () => {
             <th>Price</th>
             <th>OTP</th>
             <th>Members</th>
+            <th>Booking Time</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -61,6 +67,7 @@ const RideDetails = () => {
               <td>₹{ride.price}</td>
               <td>{ride.OTP}</td>
               <td>{ride.members}</td>
+              <td>{formatDate(ride.created_at)}</td>
               <td>
                 <button
                   className="delete-btn"
