@@ -91,14 +91,7 @@ const BookingStats = () => {
           </div>
         </div>
 
-        {/* Busiest Hour */}
-        <div className="stat-card red">
-          <FaClock className="icon" />
-          <div>
-            <p>Busiest Hour</p>
-            <h3>{bestTime}</h3>
-          </div>
-        </div>
+
 
       </div>
     </div>
