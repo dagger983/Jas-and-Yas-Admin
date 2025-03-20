@@ -9,8 +9,8 @@ export default function ProductManager() {
     name: "",
     brand: "",
     price: "",
-    category: "Shirt", // Default category
-    keyword: "Men", // Default keyword
+    category: "Men", // Default category
+    keyword: "Shirt", // Default keyword
     image_url1: "",
     image_url2: "",
     image_url3: "",
@@ -64,8 +64,8 @@ export default function ProductManager() {
           name: "",
           brand: "",
           price: "",
-          category: "Shirt",
-          keyword: "Men",
+          category: "",
+          keyword: "",
           image_url1: "",
           image_url2: "",
           image_url3: "",
@@ -140,6 +140,7 @@ export default function ProductManager() {
           <option value="Electronics">Electronics</option>
           <option value="Food">Food</option>
           <option value="HomeApp">HomeApp</option>
+          <option value="Grocery">Grocery</option>
         </select>
         <br />
         <select
