@@ -90,7 +90,7 @@ const VideoManager = () => {
         />
         <input
           type="text"
-          placeholder="Enter Video Duration (e.g., 2:30)"
+          placeholder="Enter Skip Duration (e.g., 2:30)"
           value={videoDuration}
           onChange={(e) => setVideoDuration(e.target.value)}
         />
