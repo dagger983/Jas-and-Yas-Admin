@@ -24,8 +24,8 @@ const Sidebar = () => {
       </button>
       <ul className="sidebar-menu" role="menu">
         {[
-          // { name: "Booking", href: "/" },
-          { name: "Ride Details", href: "/" },
+          { name: "Booking", href: "/" },
+          { name: "Ride Details", href: "/Rides" },
           { name: "Bookings Status", href: "/BookingStats" },
           { name: "Drivers Details", href: "/Driver" },
           { name: "Drivers Attendance", href: "/DriverEntry" },

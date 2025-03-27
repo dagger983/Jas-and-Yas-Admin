@@ -26,12 +26,12 @@ const App = () => {
             path="/login"
             element={isAuthenticated ? <Navigate to="/" /> : <Login />}
           />
-          {/* <Route
+          <Route
             path="/"
             element={
               isAuthenticated ? <AutoBookings /> : <Navigate to="/login" />
             }
-          /> */}
+          />
           <Route
             path="/Driver"
             element={
@@ -85,7 +85,7 @@ const App = () => {
             }
           />
           <Route
-            path="/"
+            path="/Rides"
             element={
               isAuthenticated ? <RideDetails /> : <Navigate to="/login" />
             }
