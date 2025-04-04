@@ -14,7 +14,7 @@ const AutoBookings = () => {
   const fetchOrders = async () => {
     try {
       const response = await axios.get(
-        `https://appsail-50024000807.development.catalystappsail.in/adminData`
+        `https://jasandyas-backend.onrender.com/adminData`
       );
       const newOrders = response.data.filter(
         (order) => !sentOrders.includes(order.id)
