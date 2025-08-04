@@ -141,7 +141,6 @@ export default function ProductManager() {
           <option value="Food">Food</option>
           <option value="HomeApp">HomeApp</option>
           <option value="Grocery">Grocery</option>
-          <option value="vegetables">vegetables</option>
         </select>
         <br />
         <select
@@ -156,7 +155,6 @@ export default function ProductManager() {
           <option value="HomeApp">HomeApp</option>
           <option value="Electronics">Electronics</option>
           <option value="Grocery">Grocery</option>
-          <option value="vegetables">vegetables</option>
 
         </select>
         <br />

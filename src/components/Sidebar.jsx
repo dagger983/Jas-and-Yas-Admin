@@ -33,7 +33,9 @@ const Sidebar = () => {
           { name: "Driver Rides", href: "/DriverRides" },
           { name: "Products Upload", href: "/ProductManager" },
           { name: "Ad Upload", href: "/Video" },
-          { name: "User Wallet Update", href: "/User" },
+          { name: "User Wallet Details", href: "/User" },
+          { name: "User Wallet Update", href: "/UserWalletUpdate" },
+  { name: "User List", href: "/UserList" },
          ,
         ].map((item) => (
           <li

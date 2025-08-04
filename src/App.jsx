@@ -13,6 +13,8 @@ import CancelClearance from "./components/CancelClearance";
 import DriverDailyRevenue from "./components/DriverDailyRevenue";
 import RideDetails from "./components/RideDetails";
 import BookingStats from "./BookingStats";
+import UserWalletUpdate from "./components/UserWalletUpdate";
+import UserList from "./components/UserList";
 const App = () => {
   const location = useLocation();
   const isAuthenticated = localStorage.getItem("isAuthenticated");
@@ -94,6 +96,18 @@ const App = () => {
             path="/BookingStats"
             element={
               isAuthenticated ? <BookingStats /> : <Navigate to="/login" />
+            }
+          />
+           <Route
+            path="/UserWalletUpdate"
+            element={
+              isAuthenticated ? <UserWalletUpdate /> : <Navigate to="/login" />
+            }
+          />
+           <Route
+            path="/UserList"
+            element={
+              isAuthenticated ? <UserList /> : <Navigate to="/login" />
             }
           />
         </Routes>
