@@ -102,7 +102,7 @@ const AutoBookings = () => {
 
     try {
       await axios.post(
-        `https://jasandyas-backend.onrender.com/rideData`,
+        `https://appsail-50024000807.development.catalystappsail.in/rideData`,
         rideData
       );
       alert('Ride Booked Successfully!');
@@ -115,7 +115,7 @@ const AutoBookings = () => {
 
       // Remove from adminData
       await axios.delete(
-        `https://jasandyas-backend.onrender.com/adminData/${order.id}`
+        `https://appsail-50024000807.development.catalystappsail.in/${order.id}`
       );
     } catch (error) {
       console.error('Error sending ride data:', error);

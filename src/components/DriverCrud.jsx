@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Driver.css';
 
-const API_BASE_URL = 'https://jasandyas-backend.onrender.com/autoData';
+const API_BASE_URL = 'https://appsail-50024000807.development.catalystappsail.in/autoData';
 
 const DriverCrud = () => {
   const [drivers, setDrivers] = useState([]);

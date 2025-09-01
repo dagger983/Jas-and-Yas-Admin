@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import "./VideoManager.css";
 
-const API_URL = "https://jasandyas-backend.onrender.com/ad_video";
+const API_URL = "https://appsail-50024000807.development.catalystappsail.in/ad_video";
 
 const VideoManager = () => {
   const [videoUrl, setVideoUrl] = useState("");

@@ -48,8 +48,8 @@ export default function ProductManager() {
     setLoading(true);
     const method = editingId ? "PUT" : "POST";
     const url = editingId
-      ? `https://jasandyas-backend.onrender.com/products/${editingId}`
-      : "https://jasandyas-backend.onrender.com/products";
+      ? `https://appsail-50024000807.development.catalystappsail.in/products/${editingId}`
+      : "https://appsail-50024000807.development.catalystappsail.in/products";
 
     try {
       const response = await fetch(url, {
@@ -90,7 +90,7 @@ export default function ProductManager() {
   const handleDelete = async (id) => {
     setLoading(true);
     try {
-      await fetch(`https://jasandyas-backend.onrender.com/products/${id}`, {
+      await fetch(`https://appsail-50024000807.development.catalystappsail.in/products/${id}`, {
         method: "DELETE",
       });
       fetchProducts();

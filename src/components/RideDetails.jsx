@@ -15,7 +15,7 @@ const RideDetails = () => {
   const handleDelete = (id) => {
     setLoading(id);
 
-    fetch(`https://jasandyas-backend.onrender.com/rideData/${id}`, {
+    fetch(`https://appsail-50024000807.development.catalystappsail.in/rideData/${id}`, {
       method: "DELETE",
     })
       .then((response) => {

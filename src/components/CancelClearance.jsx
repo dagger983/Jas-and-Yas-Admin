@@ -33,7 +33,7 @@ const CancelClearance = () => {
     setLoading(true);
     try {
       await axios.delete(
-        `https://jasandyas-backend.onrender.com/adminData/${id}`
+        `https://appsail-50024000807.development.catalystappsail.in/${id}`
       );
 
       // Remove the deleted record from the state
