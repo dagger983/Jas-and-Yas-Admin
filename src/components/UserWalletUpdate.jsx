@@ -35,7 +35,7 @@ const UserWalletUpdate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('https://appsail-50024000807.development.catalystappsail.in/user-expenses', formData);
+      const res = await axios.post('https://jasandyas-backend.onrender.com/user-expenses', formData);
       setMessage(res.data.message);
       fetchExpenses();
       setFormData({
